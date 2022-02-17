@@ -2,7 +2,11 @@ from typing import Dict
 
 from flask import Flask, request, jsonify
 
+from servises.create_db import init_connection_to_db, create_db
+
 app = Flask(__name__)
+connection = init_connection_to_db()
+create_db(connection)
 
 
 @app.route('/')
@@ -20,15 +24,10 @@ def add_log():
     Эндпоинт для добавления лога в БД
     :return: сообщение об успешности регистрации лога
     """
+    # валидация
     content: Dict[str] = request.json
-    if check_if_all_params_present(content):
-        # создаем экземпляр класса Лог
-        log = Log(content)
-        # добавляем его в бд
-        log.execute()
-        return jsonify({"status": "Log added to DB"}), 200
-    else:
-        return jsonify({"status": "Log is broken"}), 418
+    add_to_db(content, connection)
+    return jsonify({"status": "Log added to DB"}), 200
 
 
 @app.route('/get_stat/', methods=['GET'])
@@ -39,7 +38,8 @@ def get_stat():
     :return: json со статистикой по выбранным датам
     """
     args = request.args
-    statistics = get_statistics(args['date_from'], args['date_to'])
+    # проверка аргументов
+    statistics = get_statistics(args['date_from'], args['date_to'], connection)
     return statistics
 
 
