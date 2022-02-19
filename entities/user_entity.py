@@ -1,9 +1,9 @@
 from sqlalchemy import Column, String
 
-from servises.create_db import Base
+from servises import datasource
 
 
-class User(Base):
+class User(datasource.Base):
     __tablename__ = 'last_source'
 
     client_id = Column(String(10), primary_key=True)
