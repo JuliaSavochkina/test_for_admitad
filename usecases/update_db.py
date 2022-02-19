@@ -1,9 +1,11 @@
+import logging
+
 from entities import LastClick
-from servises.create_db import session
+from servises import datasource
 from usecases.base import BaseUseCase
 
 
-class UpdateClickLog(BaseUseCase):
+class UpdateClickLogUseCase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
         В рамках метода осуществляется поиск записи по client_id (такая должна быть одна),
@@ -12,17 +14,20 @@ class UpdateClickLog(BaseUseCase):
         :return:
         """
         client_id = data['client_id']
-        users_row = session.query(LastClick).filter(LastClick.client_id == client_id)
+        users_row = datasource.session.query(LastClick).filter(LastClick.client_id == client_id)
+        try:
+            users_row.user_agent = data['User-Agent']
+            users_row.location = data['document.location'],
+            users_row.referer = data['document.referer'],
+            users_row.date = data['date']
+        except Exception as e:
+            logging.error(f"Was not able to update this click in DB:{users_row} because of {e}")
+            datasource.session.rollback()
+        else:
+            datasource.session.commit()
 
-        users_row.user_agent = data['User-Agent']
-        users_row.location = data['document.location'],
-        users_row.referer = data['document.referer'],
-        users_row.date = data['date']
 
-        session.commit()
-
-
-class UpdateSourceLog(BaseUseCase):
+class UpdateSourceLogUseCase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
         В рамках метода осуществляется поиск записи по client_id (такая должна быть одна) в таблице last_source,
@@ -31,8 +36,11 @@ class UpdateSourceLog(BaseUseCase):
         :return:
         """
         client_id = data['client_id']
-        users_row = session.query(LastClick).filter(LastClick.client_id == client_id)
-
-        users_row.last_paid_source = data['last_paid_source']
-
-        session.commit()
+        users_row = datasource.session.query(LastClick).filter(LastClick.client_id == client_id)
+        try:
+            users_row.last_paid_source = data['last_paid_source']
+        except Exception as e:
+            logging.error(f"Was not able to update this source in DB:{users_row} because of {e}")
+            datasource.session.rollback()
+        else:
+            datasource.session.commit()
