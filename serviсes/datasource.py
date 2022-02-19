@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from servises import POSTGRES_USER, POSTGRES_PASSWORD, HOST, PORT, POSTGRES_DB
+from serviсes import POSTGRES_USER, POSTGRES_PASSWORD, HOST, PORT, POSTGRES_DB
 
 
 class Datasource:
