@@ -1,4 +1,4 @@
-def get_ours_stat(date_from, date_to):
+def get_statistics(date_from, date_to):
     """
     Выбирает из таблицы с заказами все, принадлежащие нашему источнику и
     удовлетворяющие указанным датам

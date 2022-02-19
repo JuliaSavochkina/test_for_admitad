@@ -1,13 +1,13 @@
-from typing import Dict
+from typing import List
 
 from flask import Flask, request, jsonify
-
+# импорт для того, чтобы декларативная база знала, какие таблицы создавать
 from entities import LastClick, Order, User
-from servises.create_db import create_db, session
-from usecases.add_to_db import AddClick
+from serviсes import datasource
+from usecases.log_analytics import AnalyseLogUsecase
 
 app = Flask(__name__)
-create_db()
+datasource.create_tables()
 
 
 @app.route('/')
@@ -26,8 +26,11 @@ def add_log():
     :return: сообщение об успешности регистрации лога
     """
     # валидация
-    content: Dict[str] = request.json
-    AddClick().execute(content)
+    content: List[dict] = request.json
+    usecase = AnalyseLogUsecase()
+    for log in content:
+        # валидация
+        usecase.execute(log)
     return jsonify({"status": "Log added to DB"}), 200
 
 
@@ -40,7 +43,7 @@ def get_stat():
     """
     args = request.args
     # проверка аргументов
-    statistics = get_statistics(args['date_from'], args['date_to'], connection)
+    statistics = get_statistics(args['date_from'], args['date_to'])
     return statistics
 
 
