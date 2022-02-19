@@ -1,9 +1,9 @@
 from sqlalchemy import Column, String, Integer
 
-from servises.create_db import Base
+from serviсes import datasource
 
 
-class Order(Base):
+class Order(datasource.Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True)

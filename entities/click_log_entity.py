@@ -1,9 +1,9 @@
 from sqlalchemy import Column, String, Integer
 
-from servises.create_db import Base
+from servises import datasource
 
 
-class LastClick(Base):
+class LastClick(datasource.Base):
     __tablename__ = 'last_click'
 
     id = Column(Integer, primary_key=True)

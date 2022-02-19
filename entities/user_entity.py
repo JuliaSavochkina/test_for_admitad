@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String
 
-from servises import datasource
+from serviсes import datasource
 
 
 class User(datasource.Base):
