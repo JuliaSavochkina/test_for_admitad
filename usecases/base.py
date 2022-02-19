@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Base(ABC):
+class BaseUseCase(ABC):
     @abstractmethod
-    def execute(self):
+    def execute(self, data: dict) -> None:
         pass
