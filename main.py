@@ -2,11 +2,12 @@ from typing import Dict
 
 from flask import Flask, request, jsonify
 
-from servises.create_db import init_connection_to_db, create_db
+from entities import LastClick, Order, User
+from servises.create_db import create_db, session
+from usecases.add_to_db import AddClick
 
 app = Flask(__name__)
-connection = init_connection_to_db()
-create_db(connection)
+create_db()
 
 
 @app.route('/')
@@ -26,7 +27,7 @@ def add_log():
     """
     # валидация
     content: Dict[str] = request.json
-    add_to_db(content, connection)
+    AddClick().execute(content)
     return jsonify({"status": "Log added to DB"}), 200
 
 
