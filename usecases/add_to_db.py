@@ -1,7 +1,7 @@
 import logging
 
 from entities import LastClick, Order, User
-from servises import datasource
+from services import datasource
 from usecases.base import BaseUseCase
 
 
