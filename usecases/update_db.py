@@ -2,7 +2,7 @@ import logging
 
 from sqlalchemy import update
 
-from entities import LastClick, User
+from entities import User
 from services import datasource
 from usecases.base import BaseUseCase
 
