@@ -1,10 +1,13 @@
+import logging
 from typing import List
 
 from flask import Flask, request, jsonify
 # импорт для того, чтобы декларативная база знала, какие таблицы создавать
-from entities import LastClick, Order, User
-from serviсes import datasource
-from usecases.log_analytics import AnalyseLogUsecase
+from sqlalchemy import update
+
+from entities import Order, User
+from services import datasource
+from usecases.log_analytics import AnalyseLogUseCase
 
 app = Flask(__name__)
 datasource.create_tables()
@@ -27,14 +30,14 @@ def add_log():
     """
     # валидация
     content: List[dict] = request.json
-    usecase = AnalyseLogUsecase()
+    usecase = AnalyseLogUseCase()
     for log in content:
         # валидация
         usecase.execute(log)
     return jsonify({"status": "Log added to DB"}), 200
 
 
-@app.route('/get_stat/', methods=['GET'])
+@app.route('/get_stat', methods=['GET'])
 def get_stat():
     """
     Эндпоинт для получения статистики.
