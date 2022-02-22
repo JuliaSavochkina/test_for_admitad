@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer
 
-from servises import datasource
+from services import datasource
 
 
 class LastClick(datasource.Base):

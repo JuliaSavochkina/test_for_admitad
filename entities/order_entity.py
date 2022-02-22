@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer
 
-from serviсes import datasource
+from services import datasource
 
 
 class Order(datasource.Base):
