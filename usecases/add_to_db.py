@@ -5,30 +5,6 @@ from services import datasource
 from usecases.base import BaseUseCase
 
 
-class AddClickUseCase(BaseUseCase):
-    def execute(self, data: dict) -> None:
-        """
-        Метод добавляет запись в таблицу last_click
-        :param data: словарь с логм
-        :return:
-        """
-        click = LastClick(
-            client_id=data['client_id'],
-            user_agent=data['User-Agent'],
-            location=data['document.location'],
-            referer=data['document.referer'],
-            date=data['date']
-        )
-        try:
-            datasource.session.add(click)
-        except Exception as e:
-            # погуглить ошибку
-            logging.error(f"Was not able to add this click to DB:{click} because of {e}")
-            datasource.session.rollback()
-        else:
-            datasource.session.commit()
-
-
 class AddOrderUseCase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
@@ -39,7 +15,7 @@ class AddOrderUseCase(BaseUseCase):
         order = Order(
             client_id=data['client_id'],
             date=data['date'],
-            source=data['source']
+            source=data['document.referer']
         )
 
         try:
