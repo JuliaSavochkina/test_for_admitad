@@ -61,7 +61,7 @@ class AddSourceUseCase(BaseUseCase):
         """
         user = User(
             client_id=data['client_id'],
-            last_paid_source=data['last_paid_source'],
+            last_paid_source=data['document.referer'],
         )
 
         try:
