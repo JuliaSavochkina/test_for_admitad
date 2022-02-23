@@ -22,12 +22,13 @@ class AnalyseLogUseCase(BaseUseCase):
         # подменить источник с ссылки на сокращенную версию
         user_row = datasource.session.query(User).filter(User.client_id == client_id).first()
         if user_row:
-            self.update_referer(data)
+            self.update_user_source(data)
         else:
             AddSourceUseCase().execute(data)
 
         if self.is_order(data):
-            AddOrderUseCase().execute(data)
+            updated_data = self.update_order_source(data)
+            AddOrderUseCase().execute(updated_data)
 
     @staticmethod
     def is_order(data_from_log: dict) -> bool:
@@ -41,7 +42,7 @@ class AnalyseLogUseCase(BaseUseCase):
                 data_from_log['document.location'] == "https://shop.com/checkout")
 
     @staticmethod
-    def update_referer(data_from_log: dict):
+    def update_user_source(data_from_log: dict):
         """
         Получает лог, проверяет, какой адрес домена,
         Если по нужному пользователю запись есть, и domain является доменом платного источника,
@@ -66,3 +67,15 @@ class AnalyseLogUseCase(BaseUseCase):
         # если у юзера нет записи
         else:
             AddSourceUseCase().execute(data_from_log)
+
+    @staticmethod
+    def update_order_source(data_from_log: dict) -> dict:
+        """
+        Метод обновляет источник поданных данных в соответсвии с источником в таблице User.
+        :param data_from_log:
+        :return:
+        """
+        client_id = data_from_log['client_id']
+        user_row = datasource.session.query(User).filter(User.client_id == client_id).first()
+        data_from_log['document.referer'] = user_row.last_paid_source
+        return data_from_log
