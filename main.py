@@ -51,8 +51,10 @@ def get_stat():
     """
     args = request.args
     # проверка аргументов
-    statistics = get_statistics(args['date_from'], args['date_to'])
-    return statistics
+    datefrom = args['date_from']
+    dateto = args['date_to']
+    statistics = get_statistics(datefrom, dateto)
+    return jsonify({F'amount of orders from {datefrom} to {dateto}': statistics})
 
 
 if __name__ == "__main__":
