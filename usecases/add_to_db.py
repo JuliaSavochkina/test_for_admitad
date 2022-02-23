@@ -28,7 +28,7 @@ class AddOrderUseCase(BaseUseCase):
             datasource.session.commit()
 
 
-class AddSourceUseCase(BaseUseCase):
+class AddClientWithSourceUsecase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
         Метод добавляет запись в таблицу last_source

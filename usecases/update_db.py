@@ -7,7 +7,7 @@ from services import datasource
 from usecases.base import BaseUseCase
 
 
-class UpdateSourceUseCase(BaseUseCase):
+class UpdateSourceForClientUseCase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
         В рамках метода осуществляется поиск записи по client_id (такая должна быть одна) в таблице last_source,
