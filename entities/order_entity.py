@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, DateTime
 
 from services import datasource
 
@@ -8,7 +8,7 @@ class Order(datasource.Base):
 
     id = Column(Integer, primary_key=True)
     client_id = Column(String(10))
-    date = Column(String(30))
+    date = Column(DateTime)
     source = Column(String)
 
     def __init__(
