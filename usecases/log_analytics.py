@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 from entities import User
 from services import datasource
-from usecases.add_to_db import AddOrderUseCase, AddClientWithSourceUsecase
+from usecases.add_to_db import AddOrderUseCase, AddClientWithSourceUseCase
 from usecases.base import BaseUseCase
 from usecases.update_db import UpdateSourceForClientUseCase
 from usecases.utils import PAID_SOURCES
@@ -20,12 +20,15 @@ class AnalyseLogUseCase(BaseUseCase):
         :return:
         """
         client_id = data['client_id']
+        referer = urlparse(data['document.referer'])
+        domain = referer.netloc
         # подменить источник с ссылки на сокращенную версию
         user_row: User = datasource.session.query(User).filter(User.client_id == client_id).first()
         if user_row:
             self.update_user_source(data, user_row)
         else:
-            AddClientWithSourceUsecase().execute(data)
+            data['document.referer'] = domain
+            AddClientWithSourceUseCase().execute(data)
 
         if self.is_order(data):
             data['document.referer'] = user_row.last_paid_source
@@ -60,9 +63,10 @@ class AnalyseLogUseCase(BaseUseCase):
         # если у юзера уже есть запись в таблице
         if user_row:
             if domain in PAID_SOURCES:
+                data_from_log['document.referer'] = domain
                 UpdateSourceForClientUseCase().execute(data_from_log)
 
         # если у юзера нет записи
         else:
-            AddClientWithSourceUsecase().execute(data_from_log)
+            AddClientWithSourceUseCase().execute(data_from_log)
 
