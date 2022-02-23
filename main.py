@@ -1,10 +1,8 @@
-import logging
 from typing import List
 
 from flask import Flask, request, jsonify
-# импорт для того, чтобы декларативная база знала, какие таблицы создавать
-from sqlalchemy import update
 
+# импорт для того, чтобы декларативная база знала, какие таблицы создавать
 from entities import Order, User
 from services import datasource
 from usecases.log_analytics import AnalyseLogUseCase
