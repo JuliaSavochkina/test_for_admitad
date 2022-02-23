@@ -22,13 +22,13 @@ class AddOrderUseCase(BaseUseCase):
             datasource.session.add(order)
         except Exception as e:
             # погуглить ошибку
-            logging.error(f"Was not able to add this click to DB:{order} because of {e}")
+            logging.error(f"Was not able to add this order to DB:{order} because of {e}")
             datasource.session.rollback()
         else:
             datasource.session.commit()
 
 
-class AddClientWithSourceUsecase(BaseUseCase):
+class AddClientWithSourceUseCase(BaseUseCase):
     def execute(self, data: dict) -> None:
         """
         Метод добавляет запись в таблицу last_source
@@ -44,7 +44,7 @@ class AddClientWithSourceUsecase(BaseUseCase):
             datasource.session.add(user)
         except Exception as e:
             # погуглить ошибку
-            logging.error(f"Was not able to add this click to DB:{user} because of {e}")
+            logging.error(f"Was not able to add this user to DB:{user} because of {e}")
             datasource.session.rollback()
         else:
             datasource.session.commit()
