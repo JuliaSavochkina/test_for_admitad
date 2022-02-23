@@ -2,9 +2,9 @@ from urllib.parse import urlparse
 
 from entities import User
 from services import datasource
-from usecases.add_to_db import AddOrderUseCase, AddSourceUseCase
+from usecases.add_to_db import AddOrderUseCase, AddClientWithSourceUsecase
 from usecases.base import BaseUseCase
-from usecases.update_db import UpdateSourceUseCase
+from usecases.update_db import UpdateSourceForClientUseCase
 from usecases.utils import PAID_SOURCES
 
 
@@ -25,7 +25,7 @@ class AnalyseLogUseCase(BaseUseCase):
         if user_row:
             self.update_user_source(data, user_row)
         else:
-            AddSourceUseCase().execute(data)
+            AddClientWithSourceUsecase().execute(data)
 
         if self.is_order(data):
             data['document.referer'] = user_row.last_paid_source
@@ -60,9 +60,9 @@ class AnalyseLogUseCase(BaseUseCase):
         # если у юзера уже есть запись в таблице
         if user_row:
             if domain in PAID_SOURCES:
-                UpdateSourceUseCase().execute(data_from_log)
+                UpdateSourceForClientUseCase().execute(data_from_log)
 
         # если у юзера нет записи
         else:
-            AddSourceUseCase().execute(data_from_log)
+            AddClientWithSourceUsecase().execute(data_from_log)
 
