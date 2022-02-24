@@ -53,6 +53,7 @@ def get_stat():
     args = request.args
     date_from = args.get('date_from')
     date_to = args.get('date_to')
+    client_id = args.get('client_id')
     if date_from and date_to:
         try:
             prepared_date_from = datetime.strptime(date_from, '%Y-%m-%d')
@@ -60,7 +61,7 @@ def get_stat():
         except ValueError:
             return jsonify({"status": "Date should be in '%Y-%m-%d'"})
         else:
-            amount_of_orders = GetStatistics().get_statistics(prepared_date_from, prepared_date_to)
+            amount_of_orders = GetStatistics().get_statistics(prepared_date_from, prepared_date_to, client_id)
         return jsonify({f'amount of orders from {date_from} to {date_to}': amount_of_orders})
 
 
