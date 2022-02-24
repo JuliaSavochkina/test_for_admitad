@@ -1,2 +1,2 @@
-from .config import POSTGRES_USER, POSTGRES_PASSWORD, HOST, PORT, POSTGRES_DB
+from .config import Config
 from .datasource import datasource
