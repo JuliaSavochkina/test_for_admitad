@@ -1,4 +1,5 @@
 from collections import Counter
+from datetime import datetime
 from typing import List
 
 from flask import Flask, request, jsonify
@@ -46,15 +47,21 @@ def add_log():
 def get_stat():
     """
     Эндпоинт для получения статистики.
-    Ожидает получить ссылку вида /get_stat/?date_from=%Y-%m-%d&date_to=%Y-%m-%d
-    :return: json со статистикой по выбранным датам
+    Ожидает получить ссылку вида /get_stat?date_from=%Y-%m-%d&date_to=%Y-%m-%d
+    :return: json с количеством заказов по выбранным датам
     """
     args = request.args
-    # проверка аргументов
-    datefrom = args['date_from']
-    dateto = args['date_to']
-    statistics = get_statistics(datefrom, dateto)
-    return jsonify({F'amount of orders from {datefrom} to {dateto}': statistics})
+    date_from = args.get('date_from')
+    date_to = args.get('date_to')
+    if date_from and date_to:
+        try:
+            prepared_date_from = datetime.strptime(date_from, '%Y-%m-%d')
+            prepared_date_to = datetime.strptime(date_to, '%Y-%m-%d')
+        except ValueError:
+            return jsonify({"status": "Date should be in '%Y-%m-%d'"})
+        else:
+            amount_of_orders = get_statistics(prepared_date_from, prepared_date_to)
+        return jsonify({f'amount of orders from {date_from} to {date_to}': amount_of_orders})
 
 
 if __name__ == "__main__":
