@@ -57,7 +57,7 @@
 
 ### Эндпоинты проекта
 /**add_log** - отвечает за работу с сырыми логами, переданными со стороны клиента. Анализирует их и распределяет данные по таблицам.
-```python
+```
 curl --location --request POST 'http://0.0.0.0:5000/add_log' \
 --header 'Content-Type: application/json' \
 --data-raw '[
@@ -77,7 +77,7 @@ curl --location --request POST 'http://0.0.0.0:5000/add_log' \
 В таблице хранятся все заказы.
 
 /**get_stat** - отвечает за получение статистики. Ожидает запрос в формате `/get_stat?date_from=%Y-%m-%d&date_to=%Y-%m-%d`, возвращает количество заказов за указанный период. Допоплнительно можно передать номер клиента в параметре `client_id` и получить количество заказов только по нему.
-```python
+```
 curl --location --request GET 'http://0.0.0.0:5000/get_stat?date_from=2021-04-30&date_to=2021-06-30&client_id=user7'
 ```
 
@@ -93,6 +93,6 @@ curl --location --request GET 'http://0.0.0.0:5000/get_stat?date_from=2021-04-30
 
 ### Тестирование
 
-```python
+```
 
 ```
