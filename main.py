@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify
 # импорт для того, чтобы декларативная база знала, какие таблицы создавать
 from entities import Order, User
 from services import datasource
-from usecases.generate_stat import GetStatistics
+from usecases.generate_stat import get_statistics
 from usecases.log_analytics import AnalyseLogUseCase
 from usecases.utils import REQUIRED_FIELDS
 
@@ -61,7 +61,7 @@ def get_stat():
         except ValueError:
             return jsonify({"status": "Date should be in '%Y-%m-%d'"})
         else:
-            amount_of_orders = GetStatistics().get_statistics(prepared_date_from, prepared_date_to, client_id)
+            amount_of_orders = get_statistics(prepared_date_from, prepared_date_to, client_id)
         return jsonify({f'amount of orders from {date_from} to {date_to}': amount_of_orders})
 
 
