@@ -4,12 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [packages]
-Flask = "==1.1.2"
+Flask = "==2.0.2"
 psycopg2-binary = "==2.9.3"
 SQLAlchemy= "==1.4.31"
-
-[dev-packages]
-
+mock-alchemy= "==0.2.5"
 
 [requires]
 python_version = "3.7"
