@@ -1,3 +1,4 @@
+from typing import Optional
 from urllib.parse import urlparse
 
 from entities import User
@@ -22,14 +23,15 @@ class AnalyseLogUseCase(BaseUseCase):
         client_id = data['client_id']
         referer = urlparse(data['document.referer'])
         domain = referer.netloc
-        # подменить источник с ссылки на сокращенную версию
-        user_row: User = datasource.session.query(User).filter(User.client_id == client_id).first()
+
+        user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
         if user_row:
             self.update_user_source(data, user_row)
         else:
             data['document.referer'] = domain
             AddClientWithSourceUseCase().execute(data)
-
+        # опрашиваем измененную таблицу, страхуем себя от пустой записи
+        user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
         if self.is_order(data):
             data['document.referer'] = user_row.last_paid_source
             AddOrderUseCase().execute(data)
@@ -46,7 +48,7 @@ class AnalyseLogUseCase(BaseUseCase):
                 data_from_log['document.location'] == "https://shop.com/checkout")
 
     @staticmethod
-    def update_user_source(data_from_log: dict, user_row: User):
+    def update_user_source(data_from_log: dict, user_row: Optional[User]):
         """
         Получает лог, проверяет, какой адрес домена,
         Если по нужному пользователю запись есть, и domain является доменом платного источника,
@@ -69,4 +71,3 @@ class AnalyseLogUseCase(BaseUseCase):
         # если у юзера нет записи
         else:
             AddClientWithSourceUseCase().execute(data_from_log)
-
