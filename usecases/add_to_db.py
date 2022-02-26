@@ -48,4 +48,3 @@ class AddClientWithSourceUseCase(BaseUseCase):
             datasource.session.rollback()
         else:
             datasource.session.commit()
-
