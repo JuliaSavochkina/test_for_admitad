@@ -1,6 +1,5 @@
 import logging
-
-from sqlalchemy import update
+from typing import Optional
 
 from entities import User
 from services import datasource
@@ -17,14 +16,10 @@ class UpdateSourceForClientUseCase(BaseUseCase):
         """
         client_id = data['client_id']
         try:
-            to_update = update(User).where(User.client_id == client_id). \
-                values(
-                {
-                    'last_paid_source': data['document.referer']
-                }
-            )
+            user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+            user_row.last_paid_source = data['document.referer']
         except Exception as e:
             logging.error(f"Was not able to update this source in DB: because of {e}")
             datasource.session.rollback()
         else:
-            datasource.conn.execute(to_update)
+            datasource.session.commit()
