@@ -16,7 +16,7 @@ jobs:
 
       - name: Use pipfile
         run: |
-          pipenv install
+          pip install --user pipenv
           python -m pipenv install Pipfile.lock
 
       - name: Testing
