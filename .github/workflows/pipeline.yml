@@ -22,7 +22,8 @@ jobs:
       - name: Use pipfile
         run: |
           pip install --user pipenv
-          python -m pipenv install Pipfile.lock
+          echo "pipenv installed"
+          python -m pipenv install Pipfile.lock --system
 
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
