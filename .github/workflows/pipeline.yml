@@ -10,7 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-
     steps:
+      - name: Git clone
+        uses: actions/checkout@v1
+
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
