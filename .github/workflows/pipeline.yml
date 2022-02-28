@@ -15,7 +15,9 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Use pipfile
-        run: python -m pipenv install Pipfile.lock
+        run: |
+        pipenv install
+        python -m pipenv install Pipfile.lock
 
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
