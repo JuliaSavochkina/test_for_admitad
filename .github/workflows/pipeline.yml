@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install --user pipenv
           echo "pipenv installed"
-          python -m pipenv install Pipfile.lock --system
+          python -m pipenv install --system
 
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
