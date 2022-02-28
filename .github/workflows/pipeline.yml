@@ -16,8 +16,8 @@ jobs:
 
       - name: Use pipfile
         run: |
-        pipenv install
-        python -m pipenv install Pipfile.lock
+          pipenv install
+          python -m pipenv install Pipfile.lock
 
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
