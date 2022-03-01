@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  web:
+    container_name: test_web
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /app
+    command:
+      python -m unittest tests.usecases_tests -bv
