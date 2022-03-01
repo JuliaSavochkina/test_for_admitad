@@ -28,10 +28,9 @@ class TestAddClientWithSourceUseCase(TestCase):
         with self.subTest(name="checking that session was called"):
             self.session.add.assert_called_once()
         with self.subTest(name="checking that user entity generated correctly"):
-            args = self.session.add.call_args.args
-            real_user = args[0]
-            self.assertEqual(expected_user.client_id, real_user.client_id)
-            self.assertEqual(expected_user.last_paid_source, real_user.last_paid_source)
+            user_after_execute = self.session.query(User).filter(User.client_id == data["client_id"]).first()
+            self.assertEqual(expected_user.client_id, user_after_execute.client_id)
+            self.assertEqual(expected_user.last_paid_source, user_after_execute.last_paid_source)
         with self.subTest(name="checking that commit is called"):
             self.session.commit.assert_called_once()
 
@@ -59,11 +58,10 @@ class TestAddOrderUseCase(TestCase):
         with self.subTest(name="checking that session was called"):
             self.session.add.assert_called_once()
         with self.subTest(name="checking that order entity generated correctly"):
-            args = self.session.add.call_args.args
-            real_user = args[0]
-            self.assertEqual(expected_order.client_id, real_user.client_id)
-            self.assertEqual(expected_order.date, real_user.date)
-            self.assertEqual(expected_order.source, real_user.source)
+            order_after_execute = self.session.query(Order).filter(Order.client_id == data["client_id"]).first()
+            self.assertEqual(expected_order.client_id, order_after_execute.client_id)
+            self.assertEqual(expected_order.date, order_after_execute.date)
+            self.assertEqual(expected_order.source, order_after_execute.source)
         with self.subTest(name="checking that commit is called"):
             self.session.commit.assert_called_once()
 
@@ -88,9 +86,8 @@ class TestUpdateSourceForClientUseCase(TestCase):
         usecase = UpdateSourceForClientUseCase()
         self.session.add(User("test", "test"))
         usecase.execute(data)
-        args = self.session.add.call_args.args
-        real_user = args[0]
-        self.assertEqual(data["document.referer"], real_user.last_paid_source)
+        user_after_execute = self.session.query(User).filter(User.client_id == data["client_id"]).first()
+        self.assertEqual(data["document.referer"], user_after_execute.last_paid_source)
         self.session.commit.assert_called_once()
 
     def test_execute__error_raised__rollback_called(self):
