@@ -20,4 +20,3 @@ def get_statistics(date_from: datetime, date_to: datetime, client_id: str = ''):
             filter(Order.date >= date_from).filter(Order.source == 'referal.ours.com'). \
             filter(Order.client_id == client_id).count()
     return amount_of_orders
-

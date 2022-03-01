@@ -1,13 +1,12 @@
+import importlib
 from unittest import TestCase
 from unittest.mock import Mock
 
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 
-from entities import User, Order
+from entities import Order, User
 from services.datasource import Datasource
-from usecases.add_to_db import AddOrderUseCase, AddClientWithSourceUseCase
-import importlib
-
+from usecases.add_to_db import AddClientWithSourceUseCase, AddOrderUseCase
 from usecases.log_analytics import AnalyseLogUseCase
 from usecases.update_db import UpdateSourceForClientUseCase
 

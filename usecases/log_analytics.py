@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 
 from entities import User
 from services import datasource
-from usecases.add_to_db import AddOrderUseCase, AddClientWithSourceUseCase
+from usecases.add_to_db import AddClientWithSourceUseCase, AddOrderUseCase
 from usecases.base import BaseUseCase
 from usecases.update_db import UpdateSourceForClientUseCase
 from usecases.utils import PAID_SOURCES
