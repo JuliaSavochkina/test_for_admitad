@@ -90,9 +90,15 @@ curl --location --request GET 'http://0.0.0.0:5000/get_stat?date_from=2021-04-30
 Склонируйте проект на свой компьютер.
 
 ### Запуск проекта
+```shell script
+docker-compose up --build
+```
+ или через `make run`.
 
 ### Тестирование
-
+Тесты локально запускаются командой
+```shell script
+python -m unittest tests.usecases_tests -bv
 ```
 
-```
+или через `make test`.
