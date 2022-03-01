@@ -13,10 +13,10 @@ def get_statistics(date_from: datetime, date_to: datetime, client_id: str = ''):
     :return:
     """
     if not client_id:
-        amount_of_orders = datasource.session.query(Order).filter(Order.date <= date_to). \
-            filter(Order.date >= date_from).filter(Order.source == 'referal.ours.com').count()
+        amount_of_orders = (datasource.session.query(Order).filter(Order.date <= date_to).
+                            filter(Order.date >= date_from).filter(Order.source == 'referal.ours.com').count())
     else:
-        amount_of_orders = datasource.session.query(Order).filter(Order.date <= date_to). \
-            filter(Order.date >= date_from).filter(Order.source == 'referal.ours.com'). \
-            filter(Order.client_id == client_id).count()
+        amount_of_orders = (datasource.session.query(Order).filter(Order.date <= date_to).
+                            filter(Order.date >= date_from).filter(Order.source == 'referal.ours.com').
+                            filter(Order.client_id == client_id).count())
     return amount_of_orders

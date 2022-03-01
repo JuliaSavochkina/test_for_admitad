@@ -158,7 +158,8 @@ class TestAnalyseLogUseCase(TestCase):
         data = {"client_id": "test",
                 "document.location": "https://shop.com/checkout",
                 "document.referer": "https://shop.com/cart"}
-        updated_data = {"client_id": "test", "document.location": "https://shop.com/checkout", "document.referer": "referal.ours.com"}
+        updated_data = {"client_id": "test", "document.location": "https://shop.com/checkout",
+                        "document.referer": "referal.ours.com"}
         self.session.add(User("test", "referal.ours.com"))
         usecase = AnalyseLogUseCase()
         usecase.execute(data)
