@@ -19,11 +19,11 @@ jobs:
         with:
           python-version: '3.7'
 
+      - name: Install pipenv
+        run: pip install --user pipenv
+
       - name: Use pipfile
-        run: |
-          pip install --user pipenv
-          echo "pipenv installed"
-          python -m pipenv install --system
+        run: python -m pipenv install --system
 
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
