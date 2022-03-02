@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +25,5 @@ jobs:
       - name: Use pipfile
         run: python -m pipenv install --system
 
-  test:
-    runs-on: ubuntu-latest
-    needs: [build]
-
-    steps:
       - name: Testing
         run: python -m unittest tests.usecases_tests -bv
