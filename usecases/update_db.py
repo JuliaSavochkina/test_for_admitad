@@ -17,9 +17,11 @@ class UpdateSourceForClientUseCase(BaseUseCase):
         client_id = data['client_id']
         try:
             user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+            logging.debug(f'Get {user_row} from User table')
             user_row.last_paid_source = data['document.referer']
         except Exception as e:
             logging.error(f"Was not able to update this source in DB: because of {e}")
             datasource.session.rollback()
         else:
+            logging.info("Log successfully updated")
             datasource.session.commit()

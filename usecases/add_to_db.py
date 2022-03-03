@@ -25,6 +25,7 @@ class AddOrderUseCase(BaseUseCase):
             logging.error(f"Was not able to add this order to DB:{order} because of {e}")
             datasource.session.rollback()
         else:
+            logging.info("Log successfully added")
             datasource.session.commit()
 
 
@@ -47,4 +48,5 @@ class AddClientWithSourceUseCase(BaseUseCase):
             logging.error(f"Was not able to add this user to DB:{user} because of {e}")
             datasource.session.rollback()
         else:
+            logging.info("Log successfully added")
             datasource.session.commit()
