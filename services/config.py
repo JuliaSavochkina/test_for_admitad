@@ -10,4 +10,4 @@ class Config:
     POSTGRES_USER = os.getenv('POSTGRES_USER')
     POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
     POSTGRES_DB = os.getenv('POSTGRES_DB')
-    LOG_LEVEL = int(os.getenv('LOG_LEVEL', default=20))
+    LOG_LEVEL = int(os.getenv('LOG_LEVEL'))
