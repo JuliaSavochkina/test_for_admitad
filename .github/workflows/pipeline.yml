@@ -26,6 +26,4 @@ jobs:
         run: python -m pipenv install --system
 
       - name: Testing
-        run:
-          export $(cat env/.dev.env | xargs) && printenv
-          python -m unittest tests.usecases_tests -bv
+        run: export $(cat env/.dev.env | xargs) && printenv && python -m unittest tests.usecases_tests -bv
