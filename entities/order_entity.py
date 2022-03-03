@@ -20,3 +20,6 @@ class Order(datasource.Base):
         self.date = date
         self.client_id = client_id
         self.source = source
+
+    def __repr__(self):
+        return f'order: date={self.date}, client_id={self.client_id}, source={self.source}'

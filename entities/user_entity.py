@@ -16,3 +16,6 @@ class User(datasource.Base):
     ) -> None:
         self.client_id = client_id
         self.last_paid_source = last_paid_source
+
+    def __repr__(self):
+        return f'user: client_id={self.client_id}, last_paid_source={self.last_paid_source}'
