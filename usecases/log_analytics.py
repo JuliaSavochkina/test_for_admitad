@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 from urllib.parse import urlparse
 
@@ -25,6 +26,7 @@ class AnalyseLogUseCase(BaseUseCase):
         domain = referer.netloc
 
         user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+        logging.debug(f'Get {user_row} from User table')
         if user_row:
             self.update_user_source(data, user_row)
         else:
@@ -32,6 +34,7 @@ class AnalyseLogUseCase(BaseUseCase):
             AddClientWithSourceUseCase().execute(data)
         # опрашиваем измененную таблицу, страхуем себя от пустой записи
         user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+        logging.debug(f'Get {user_row} from updated User table')
         if self.is_order(data):
             data['document.referer'] = user_row.last_paid_source
             AddOrderUseCase().execute(data)
