@@ -103,3 +103,25 @@ docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
 или через `make test`. Команда запускает тест в контейнере.
+
+
+### Remote debug
+
+1. Настройте интерпретатор:
+* File -> Settings -> Python Interpreter
+* Добавьте новый типа Docker Compose так, как на скрине ниже:
+![](https://i.imgur.com/MWslTTi.png)
+* Настройте маппинг:
+![](https://i.imgur.com/2JH9uwx.png)
+  Примените и сохраните настройки.
+
+2. Настройте конфигурацию:
+* Добавьте новую  
+![](https://i.imgur.com/fUapLDh.png)  
+типа Python  
+![](https://i.imgur.com/0n8mkfM.png) 
+
+* Настройте новую конфигурацию, как на скрине  
+![](https://i.imgur.com/Ag70Nmm.png)
+
+* примените и сохраните.  
