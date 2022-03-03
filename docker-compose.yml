@@ -9,6 +9,8 @@ services:
     ports:
       - "5000:5000"
     restart: always
+    env_file:
+      - env/.dev.env
     command:
       python main.py
     depends_on:

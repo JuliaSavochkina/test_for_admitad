@@ -9,3 +9,5 @@ services:
     working_dir: /app
     command:
       python -m unittest tests.usecases_tests -bv
+    env_file:
+      - env/.dev.env
