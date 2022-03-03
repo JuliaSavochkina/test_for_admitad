@@ -84,7 +84,8 @@ curl --location --request GET 'http://0.0.0.0:5000/get_stat?date_from=2021-04-30
 Ожидает получить данные методом `GET`. Далее идет выбор из таблицы с заказами тех, что являются "нашими" за указанные даты. Дополнительно можно указать фильтр по клиенту.
 
 ## Технологии в проекте
-В проекте использована база данных `PostgreSQL` с двумя таблицами. Таблицы можно посмотреть через `adminer`.
+В проекте использована база данных `PostgreSQL` с двумя таблицами. Таблицы можно посмотреть через `adminer` - http://localhost:8080/.
+![](https://i.imgur.com/kAehrMI.png)
 
 ## Приступая к работе
 Склонируйте проект на свой компьютер.
@@ -98,7 +99,7 @@ docker-compose up --build
 ### Тестирование
 Тесты локально запускаются командой
 ```shell script
-python -m unittest tests.usecases_tests -bv
+docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
-или через `make test`.
+или через `make test`. Команда запускает тест в контейнере.
