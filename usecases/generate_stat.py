@@ -7,9 +7,9 @@ from services import datasource
 def get_statistics(date_from: datetime, date_to: datetime, client_id: str = ''):
     """
     Выбирает из таблицы с заказами все, принадлежащие нашему источнику и удовлетворяющие указанным датам
-    :param date_from:
-    :param date_to:
-    :param client_id:
+    :param date_from: дата начала сбора статистики
+    :param date_to: дата окончания сбора статистики
+    :param client_id: идентификатор клиента, необязательный параметр
     :return:
     """
     if not client_id:
