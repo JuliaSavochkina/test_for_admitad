@@ -1,3 +1,4 @@
+import logging
 from collections import Counter
 from datetime import datetime
 from typing import List
@@ -6,13 +7,15 @@ from flask import Flask, request, jsonify
 
 # импорт для того, чтобы декларативная база знала, какие таблицы создавать
 from entities import Order, User
-from services import datasource
+from services import Config, datasource
 from usecases.generate_stat import get_statistics
 from usecases.log_analytics import AnalyseLogUseCase
-from usecases.utils import REQUIRED_FIELDS
+from usecases.consts import REQUIRED_FIELDS
 
 app = Flask(__name__)
 datasource.create_tables()
+
+logging.basicConfig(level=Config.LOG_LEVEL)
 
 
 @app.route('/')
