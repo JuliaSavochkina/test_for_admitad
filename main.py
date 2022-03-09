@@ -66,6 +66,8 @@ def get_stat():
         else:
             amount_of_orders = get_statistics(prepared_date_from, prepared_date_to, client_id)
         return jsonify({f'amount of orders from {date_from} to {date_to}': amount_of_orders})
+    else:
+        return jsonify({"status": "date_from and date_to should be passed"})
 
 
 if __name__ == "__main__":
