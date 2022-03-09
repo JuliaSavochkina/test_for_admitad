@@ -21,7 +21,6 @@ class AddOrderUseCase(BaseUseCase):
         try:
             datasource.session.add(order)
         except Exception as e:
-            # погуглить ошибку
             logging.error(f"Was not able to add this order to DB:{order} because of {e}")
             datasource.session.rollback()
         else:
@@ -44,7 +43,6 @@ class AddClientWithSourceUseCase(BaseUseCase):
         try:
             datasource.session.add(user)
         except Exception as e:
-            # погуглить ошибку
             logging.error(f"Was not able to add this user to DB:{user} because of {e}")
             datasource.session.rollback()
         else:
