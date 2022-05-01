@@ -1,11 +1,12 @@
-import logging
-
 from entities import Order, User
-from services import datasource
+from repo import OrderRepo, UserRepo
 from usecases.base import BaseUseCase
 
 
 class AddOrderUseCase(BaseUseCase):
+    def __init__(self, order_repo: OrderRepo):
+        self.order_repo = order_repo
+
     def execute(self, data: dict) -> None:
         """
         Метод добавляет запись в таблицу orders
@@ -17,18 +18,13 @@ class AddOrderUseCase(BaseUseCase):
             date=data['date'],
             source=data['document.referer']
         )
-
-        try:
-            datasource.session.add(order)
-        except Exception as e:
-            logging.error(f"Was not able to add this order to DB:{order} because of {e}")
-            datasource.session.rollback()
-        else:
-            logging.info("Log successfully added")
-            datasource.session.commit()
+        self.order_repo.add_order(order)
 
 
 class AddClientWithSourceUseCase(BaseUseCase):
+    def __init__(self, user_repo: UserRepo):
+        self.user_repo = user_repo
+
     def execute(self, data: dict) -> None:
         """
         Метод добавляет запись в таблицу last_source
@@ -39,12 +35,4 @@ class AddClientWithSourceUseCase(BaseUseCase):
             client_id=data['client_id'],
             last_paid_source=data['document.referer'],
         )
-
-        try:
-            datasource.session.add(user)
-        except Exception as e:
-            logging.error(f"Was not able to add this user to DB:{user} because of {e}")
-            datasource.session.rollback()
-        else:
-            logging.info("Log successfully added")
-            datasource.session.commit()
+        self.user_repo.add_user(user)

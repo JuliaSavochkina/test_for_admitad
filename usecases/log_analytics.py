@@ -3,14 +3,17 @@ from typing import Optional
 from urllib.parse import urlparse
 
 from entities import User
-from services import datasource
+from repo import UserRepo, OrderRepo
 from usecases.add_to_db import AddClientWithSourceUseCase, AddOrderUseCase
 from usecases.base import BaseUseCase
-from usecases.update_db import UpdateSourceForClientUseCase
 from usecases.consts import PAID_SOURCES
 
 
 class AnalyseLogUseCase(BaseUseCase):
+    def __init__(self, user_repo: UserRepo, order_repo: OrderRepo):
+        self.user_repo = user_repo
+        self.order_repo = order_repo
+
     def execute(self, data: dict) -> None:
         """
         Метод в таблице с последними платными источниками находит пользователя с тем же client_id, что в data.
@@ -25,19 +28,19 @@ class AnalyseLogUseCase(BaseUseCase):
         referer = urlparse(data['document.referer'])
         domain = referer.netloc
 
-        user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+        user_row: Optional[User] = self.user_repo.get_client_by_id(client_id)
         logging.debug(f'Get {user_row} from User table')
         if user_row:
             self.update_user_source(data, user_row)
         else:
             data['document.referer'] = domain
-            AddClientWithSourceUseCase().execute(data)
+            AddClientWithSourceUseCase(user_repo=self.user_repo).execute(data)
         # опрашиваем измененную таблицу, страхуем себя от пустой записи
-        user_row: Optional[User] = datasource.session.query(User).filter(User.client_id == client_id).first()
+        user_row: Optional[User] = self.user_repo.get_client_by_id(client_id)
         logging.debug(f'Get {user_row} from updated User table')
         if self.is_order(data):
             data['document.referer'] = user_row.last_paid_source
-            AddOrderUseCase().execute(data)
+            AddOrderUseCase(order_repo=self.order_repo).execute(data)
 
     @staticmethod
     def is_order(data_from_log: dict) -> bool:
@@ -50,8 +53,7 @@ class AnalyseLogUseCase(BaseUseCase):
         return data_from_log['document.referer'] == "https://shop.com/cart" and (
                 data_from_log['document.location'] == "https://shop.com/checkout")
 
-    @staticmethod
-    def update_user_source(data_from_log: dict, user_row: Optional[User]):
+    def update_user_source(self, data_from_log: dict, user_row: Optional[User]):
         """
         Получает лог, проверяет, какой адрес домена,
         Если по нужному пользователю запись есть, и domain является доменом платного источника,
@@ -66,11 +68,10 @@ class AnalyseLogUseCase(BaseUseCase):
         domain = referer.netloc
 
         # если у юзера уже есть запись в таблице
-        if user_row:
-            if domain in PAID_SOURCES:
-                data_from_log['document.referer'] = domain
-                UpdateSourceForClientUseCase().execute(data_from_log)
+        if user_row and domain in PAID_SOURCES:
+            client_id = data_from_log['client_id']
+            self.user_repo.update_last_paid_source(client_id, domain)
 
         # если у юзера нет записи
         else:
-            AddClientWithSourceUseCase().execute(data_from_log)
+            AddClientWithSourceUseCase(user_repo=self.user_repo).execute(data_from_log)

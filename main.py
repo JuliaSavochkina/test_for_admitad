@@ -7,6 +7,7 @@ from flask import Flask, request, jsonify
 
 # импорт для того, чтобы декларативная база знала, какие таблицы создавать
 from entities import Order, User
+from repo import UserRepo, OrderRepo
 from services import Config, datasource
 from usecases.generate_stat import get_statistics
 from usecases.log_analytics import AnalyseLogUseCase
@@ -14,7 +15,8 @@ from usecases.consts import REQUIRED_FIELDS
 
 app = Flask(__name__)
 datasource.create_tables()
-
+user_repo = UserRepo(datasource=datasource)
+order_repo = OrderRepo(datasource=datasource)
 logging.basicConfig(level=Config.LOG_LEVEL)
 
 
@@ -35,7 +37,7 @@ def add_log():
     """
     content: List[dict] = request.json
     error_logs = []
-    usecase = AnalyseLogUseCase()
+    usecase = AnalyseLogUseCase(user_repo=user_repo, order_repo=order_repo)
     for log in content:
         if Counter(log.keys()) != Counter(REQUIRED_FIELDS):
             error_logs.append(log)
